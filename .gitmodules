@@ -1,0 +1,15 @@
+[submodule "nd_db"]
+	path = nd_db
+	url = https://github.com/nexus-designer/nd_db.git
+[submodule "nd_dbcntl"]
+	path = nd_dbcntl
+	url = https://github.com/nexus-designer/nd_dbcntl.git
+[submodule "nd_core"]
+	path = nd_core
+	url = https://github.com/nexus-designer/nd_core.git
+[submodule "nd_server"]
+	path = nd_server
+	url = https://github.com/nexus-designer/nd_server.git
+[submodule "nd_web"]
+	path = nd_web
+	url = https://github.com/nexus-designer/nd_web.git
