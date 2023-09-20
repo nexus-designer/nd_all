@@ -10,6 +10,7 @@
 
 ## Setup
 
+-   Rename `.env.sample` to `.env`. Edit any variables inside if needed
 -   Run `git submodule update --init --recursive --remote`
 
 -   Open `the module you would like to work on in your IDE`
