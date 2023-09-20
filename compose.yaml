@@ -1,0 +1,80 @@
+volumes:
+    db_data:
+    pgadmin_data:
+    nd_data:
+
+services:
+    db:
+        extends:
+            file: ./nd_db/compose.yaml
+            service: db
+        build:
+            context: ./nd_db/
+            tags:
+                - nd_db
+        ports:
+            - "${DB_PORT_EXT}:${DB_PORT}"
+        env_file: .env
+        environment:
+            - POSTGRES_USER=${DB_ROOT_USER_NAME}
+            - POSTGRES_PASSWORD=${DB_ROOT_USER_PASS}
+
+    pgadmin:
+        image: dpage/pgadmin4:7.5
+        ports:
+            - "${PGADMIN_PORT_EXT}:${PGADMIN_PORT}"
+        environment:
+            - PGADMIN_DEFAULT_EMAIL=${PGADMIN_USER}
+            - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASS}
+        volumes:
+            - type: volume
+              source: pgadmin_data
+              target: /var/lib/pgadmin
+
+    dbcntl:
+        extends:
+            file: ./nd_dbcntl/compose.yaml
+            service: dbcntl
+        build:
+            context: ./nd_dbcntl/
+            tags:
+                - nd_dbcntl
+        depends_on:
+            - db
+        env_file: .env
+        environment:
+            - DB_CONNECTION_STR=postgresql://${DB_ROOT_USER_NAME}:${DB_ROOT_USER_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}
+
+    core:
+        extends:
+            file: ./nd_core/compose.yaml
+            service: core
+        build:
+            context: ./nd_core/
+            tags:
+                - nd_core
+        env_file: .env
+
+    server:
+        extends:
+            file: ./nd_server/compose.yaml
+            service: server
+        build:
+            context: ./nd_server/
+            tags:
+                - nd_server
+        ports:
+            - "${SERVER_PORT_EXT}:${SERVER_PORT}"
+        env_file: .env
+
+    web:
+        extends:
+            file: ./nd_web/compose.yaml
+            service: web
+        build:
+            context: ./nd_web/
+            tags:
+                - nd_web
+        ports:
+            - "${WEB_PORT_EXT}:${WEB_PORT}"
+        env_file: .env
